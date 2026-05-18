@@ -3,8 +3,8 @@ import { Button, MainWindow, ThemeProvider } from '@jetbrains/int-ui-kit';
 import conflictDialogDisabledImage from '../img/Conflict dialog disabled.png';
 import conflictDialogNothingResolvedImage from '../img/Conflict dialog nothing resolved.png';
 import conflictDialogImage from '../img/Conflict dialog.png';
-import checkmarkDarkIcon from '../../int-ui-kit-for-web/src/icons/actions/checked_dark.svg';
-import magicResolveToolbarIcon from '../../int-ui-kit-for-web/src/icons/diff/magicResolveToolbar_dark.svg';
+import checkmarkDarkIcon from '@jetbrains/int-ui-kit-icons/actions/checked_dark.svg';
+import magicResolveToolbarIcon from '@jetbrains/int-ui-kit-icons/diff/magicResolveToolbar_dark.svg';
 import './App.css';
 
 const NOTHING_RESOLVED_DELAY_MS = 600;

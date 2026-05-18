@@ -6,12 +6,13 @@ import { fileURLToPath } from 'node:url'
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
+  base: '/VCSprototypes/',
   plugins: [react({ include: /\.[jt]sx?$/ })],
   server: {
     fs: {
       allow: [
         dirname,
-        path.resolve(dirname, '../int-ui-kit-for-web'),
+        path.resolve(dirname, 'node_modules/@jetbrains/int-ui-kit'),
       ],
     },
   },
@@ -19,11 +20,15 @@ export default defineConfig({
     alias: [
       {
         find: '@jetbrains/int-ui-kit/styles.css',
-        replacement: path.resolve(dirname, '../int-ui-kit-for-web/src/lib/styles.js'),
+        replacement: path.resolve(dirname, 'node_modules/@jetbrains/int-ui-kit/src/lib/styles.js'),
       },
       {
         find: '@jetbrains/int-ui-kit',
-        replacement: path.resolve(dirname, '../int-ui-kit-for-web/src/lib/index.js'),
+        replacement: path.resolve(dirname, 'node_modules/@jetbrains/int-ui-kit/src/lib/index.js'),
+      },
+      {
+        find: '@jetbrains/int-ui-kit-icons',
+        replacement: path.resolve(dirname, 'node_modules/@jetbrains/int-ui-kit/src/icons'),
       },
       {
         find: 'react',
