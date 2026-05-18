@@ -12,8 +12,15 @@ const NOTHING_RESOLVED_DELAY_MS = 600;
 const SCREENS = [
   { id: 'quick-resolution', label: 'Quick Resolution' },
   { id: 'long-running-resolution', label: 'Long-Running Resolution' },
-  { id: 'progress-bar', label: 'Progress Bar' },
 ];
+const ACTIVE_SCREEN_STORAGE_KEY = 'vcs-prototypes-active-screen';
+
+function getInitialActiveScreenId() {
+  const storedScreenId = window.localStorage.getItem(ACTIVE_SCREEN_STORAGE_KEY);
+  const isStoredScreenAvailable = SCREENS.some((screen) => screen.id === storedScreenId);
+
+  return isStoredScreenAvailable ? storedScreenId : SCREENS[0].id;
+}
 
 function ProjectMainWindow({ children }) {
   return (
@@ -33,9 +40,11 @@ function ProjectMainWindow({ children }) {
   );
 }
 
-function ResolveConflictsDialog() {
+function ResolveConflictsDialog({ resolutionMode }) {
   const [isResolveButtonDisabled, setIsResolveButtonDisabled] = useState(false);
   const [conflictDialogState, setConflictDialogState] = useState('default');
+  const [isProgressDialogVisible, setIsProgressDialogVisible] = useState(false);
+  const isLongRunningResolution = resolutionMode === 'long-running';
 
   const conflictDialogImageByState = {
     default: conflictDialogImage,
@@ -51,59 +60,71 @@ function ResolveConflictsDialog() {
     setConflictDialogState('disabled');
 
     window.setTimeout(() => {
+      if (isLongRunningResolution) {
+        setIsProgressDialogVisible(true);
+        return;
+      }
+
       setConflictDialogState('nothingResolved');
     }, NOTHING_RESOLVED_DELAY_MS);
   };
 
+  const handleProgressComplete = () => {
+    setIsProgressDialogVisible(false);
+    setConflictDialogState('nothingResolved');
+  };
+
   return (
-    <div className="conflict-dialog-image-layer">
-      <div className="conflict-dialog-image-frame">
-        <img
-          className="conflict-dialog-image"
-          src={conflictDialogImageByState[conflictDialogState]}
-          alt=""
-        />
-        <Button
-          className="conflict-dialog-button"
-          disabled={isResolveButtonDisabled}
-          onClick={handleResolveButtonClick}
-        >
+    <>
+      <div className="conflict-dialog-image-layer">
+        <div className="conflict-dialog-image-frame">
           <img
-            className={`conflict-dialog-button-icon${isResolveButtonDisabled ? ' conflict-dialog-button-icon-disabled' : ''}`}
-            src={resolveButtonIcon}
+            className="conflict-dialog-image"
+            src={conflictDialogImageByState[conflictDialogState]}
             alt=""
           />
-          <span>{resolveButtonText}</span>
-        </Button>
+          <Button
+            className="conflict-dialog-button"
+            disabled={isResolveButtonDisabled}
+            onClick={handleResolveButtonClick}
+          >
+            <img
+              className={`conflict-dialog-button-icon${isResolveButtonDisabled ? ' conflict-dialog-button-icon-disabled' : ''}`}
+              src={resolveButtonIcon}
+              alt=""
+            />
+            <span>{resolveButtonText}</span>
+          </Button>
+        </div>
       </div>
-    </div>
+
+      {isProgressDialogVisible && (
+        <div className="progress-dialog-layer">
+          <ResolveConflictsProgressDialog onComplete={handleProgressComplete} />
+        </div>
+      )}
+    </>
   );
 }
 
-function ResolveConflictsScreen() {
+function ResolveConflictsScreen({ resolutionMode }) {
   return (
     <section className="dialog-demo-screen" aria-label="Resolve conflicts prototype">
       <ProjectMainWindow>
-        <ResolveConflictsDialog />
-      </ProjectMainWindow>
-    </section>
-  );
-}
-
-function ProgressBarScreen() {
-  return (
-    <section className="dialog-demo-screen" aria-label="Progress bar prototype">
-      <ProjectMainWindow>
-        <div className="progress-dialog-layer">
-          <ResolveConflictsProgressDialog />
-        </div>
+        <ResolveConflictsDialog resolutionMode={resolutionMode} />
       </ProjectMainWindow>
     </section>
   );
 }
 
 export default function App() {
-  const [activeScreenId, setActiveScreenId] = useState(SCREENS[0].id);
+  const [activeScreenId, setActiveScreenId] = useState(getInitialActiveScreenId);
+  const activeResolutionMode = activeScreenId === 'long-running-resolution' ? 'long-running' : 'quick';
+
+  const handleScreenChange = (screenId) => {
+    window.localStorage.setItem(ACTIVE_SCREEN_STORAGE_KEY, screenId);
+    setActiveScreenId(screenId);
+  };
 
   return (
     <ThemeProvider defaultTheme="dark">
@@ -116,18 +137,17 @@ export default function App() {
               className={`screen-switcher-tab${screen.id === activeScreenId ? ' screen-switcher-tab-active' : ''}`}
               role="tab"
               aria-selected={screen.id === activeScreenId}
-              onClick={() => setActiveScreenId(screen.id)}
+              onClick={() => handleScreenChange(screen.id)}
             >
               {screen.label}
             </button>
           ))}
         </div>
 
-        {activeScreenId === 'progress-bar' ? (
-          <ProgressBarScreen key={activeScreenId} />
-        ) : (
-          <ResolveConflictsScreen key={activeScreenId} />
-        )}
+        <ResolveConflictsScreen
+          key={activeScreenId}
+          resolutionMode={activeResolutionMode}
+        />
       </main>
     </ThemeProvider>
   );

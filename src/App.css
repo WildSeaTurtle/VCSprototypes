@@ -63,7 +63,7 @@
 .progress-dialog-layer {
   position: absolute;
   inset: var(--main-window-inset);
-  z-index: 2;
+  z-index: 3;
   display: flex;
   align-items: center;
   justify-content: center;

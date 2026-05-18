@@ -4,10 +4,11 @@ import { Button, Dialog, ProgressBar } from '@jetbrains/int-ui-kit';
 const TOTAL_FILES = 15;
 const PROGRESS_DURATION_MS = 9000;
 const PROGRESS_PAUSE_MS = 700;
+const COMPLETE_DISMISS_DELAY_MS = 300;
 const PAUSE_FILES = [3, 8];
 const PAUSE_PROGRESS_POINTS = PAUSE_FILES.map((fileNumber) => ((fileNumber - 1) / TOTAL_FILES) * 100);
 
-export default function ResolveConflictsProgressDialog() {
+export default function ResolveConflictsProgressDialog({ onComplete }) {
   const [progress, setProgress] = useState(0);
   const currentFile = Math.min(TOTAL_FILES, Math.floor((progress / 100) * TOTAL_FILES + 0.0001) + 1);
 
@@ -15,6 +16,7 @@ export default function ResolveConflictsProgressDialog() {
     let animationFrameId;
     let startedAt;
     let pausedAt;
+    let completeTimerId;
     let accumulatedPauseMs = 0;
     const completedPauses = new Set();
 
@@ -53,13 +55,20 @@ export default function ResolveConflictsProgressDialog() {
 
       if (nextProgress < 100) {
         animationFrameId = window.requestAnimationFrame(animateProgress);
+      } else {
+        completeTimerId = window.setTimeout(() => {
+          onComplete?.();
+        }, COMPLETE_DISMISS_DELAY_MS);
       }
     };
 
     animationFrameId = window.requestAnimationFrame(animateProgress);
 
-    return () => window.cancelAnimationFrame(animationFrameId);
-  }, []);
+    return () => {
+      window.cancelAnimationFrame(animationFrameId);
+      window.clearTimeout(completeTimerId);
+    };
+  }, [onComplete]);
 
   return (
     <Dialog
