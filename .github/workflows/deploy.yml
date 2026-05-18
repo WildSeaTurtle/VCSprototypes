@@ -28,13 +28,15 @@ jobs:
           node-version: 22.13.0
           cache: npm
 
-      - name: Configure private GitHub dependencies
+      - name: Checkout UI kit
         env:
           INT_UI_KIT_TOKEN: ${{ secrets.INT_UI_KIT_TOKEN }}
         run: |
+          cd ..
           if [ -n "$INT_UI_KIT_TOKEN" ]; then
-            git config --global url."https://x-access-token:${INT_UI_KIT_TOKEN}@github.com/".insteadOf "https://github.com/"
-            git config --global url."https://x-access-token:${INT_UI_KIT_TOKEN}@github.com/".insteadOf "ssh://git@github.com/"
+            git clone "https://x-access-token:${INT_UI_KIT_TOKEN}@github.com/JetBrains/int-ui-kit-for-web.git"
+          else
+            git clone "https://github.com/JetBrains/int-ui-kit-for-web.git"
           fi
 
       - name: Install dependencies
