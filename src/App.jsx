@@ -11,10 +11,23 @@ import './App.css';
 
 const NOTHING_RESOLVED_DELAY_MS = 600;
 const TOOLTIP_DELAY_MS = 300;
-const SCREENS = [
-  { id: 'quick-resolution', label: 'Quick Resolution' },
-  { id: 'long-running-resolution', label: 'Long-Running Resolution' },
+const SCREEN_GROUPS = [
+  {
+    title: 'No loader, 600 ms delay',
+    screens: [
+      { id: 'quick-resolution-no-loader', label: 'Quick Resolution', resolutionMode: 'quick', buttonMode: 'no-loader' },
+      { id: 'long-running-resolution-no-loader', label: 'Long-Running Resolution', resolutionMode: 'long-running', buttonMode: 'no-loader' },
+    ],
+  },
+  {
+    title: 'Loader on button',
+    screens: [
+      { id: 'quick-resolution-button-loader', label: 'Quick Resolution', resolutionMode: 'quick', buttonMode: 'button-loader' },
+      { id: 'long-running-resolution-button-loader', label: 'Long-Running Resolution', resolutionMode: 'long-running', buttonMode: 'button-loader' },
+    ],
+  },
 ];
+const SCREENS = SCREEN_GROUPS.flatMap((group) => group.screens);
 const ACTIVE_SCREEN_STORAGE_KEY = 'vcs-prototypes-active-screen';
 
 function getInitialActiveScreenId() {
@@ -42,7 +55,7 @@ function ProjectMainWindow({ children }) {
   );
 }
 
-function ResolveConflictsDialog({ resolutionMode }) {
+function ResolveConflictsDialog({ buttonMode, resolutionMode }) {
   const [isResolveButtonDisabled, setIsResolveButtonDisabled] = useState(false);
   const [conflictDialogState, setConflictDialogState] = useState('default');
   const [isProgressDialogVisible, setIsProgressDialogVisible] = useState(false);
@@ -58,6 +71,7 @@ function ResolveConflictsDialog({ resolutionMode }) {
     someResolved: conflictDialogSomeResolvedImage,
   };
   const isResolved = conflictDialogState === 'nothingResolved' || conflictDialogState === 'someResolved';
+  const isButtonLoaderVisible = buttonMode === 'button-loader' && isResolveButtonDisabled && !isResolved;
   const resolveButtonIcon = isResolved ? checkmarkDarkIcon : magicResolveToolbarIcon;
   const resolveButtonText = conflictDialogState === 'someResolved'
     ? 'Some simple conflicts resolved'
@@ -142,11 +156,15 @@ function ResolveConflictsDialog({ resolutionMode }) {
               disabled={isResolveButtonDisabled}
               onClick={handleResolveButtonClick}
             >
-              <img
-                className={`conflict-dialog-button-icon${isResolveButtonDisabled ? ' conflict-dialog-button-icon-disabled' : ''}`}
-                src={resolveButtonIcon}
-                alt=""
-              />
+              {isButtonLoaderVisible ? (
+                <span className="conflict-dialog-button-loader" aria-hidden="true" />
+              ) : (
+                <img
+                  className={`conflict-dialog-button-icon${isResolveButtonDisabled ? ' conflict-dialog-button-icon-disabled' : ''}`}
+                  src={resolveButtonIcon}
+                  alt=""
+                />
+              )}
               <span>{resolveButtonText}</span>
             </Button>
 
@@ -174,11 +192,14 @@ function ResolveConflictsDialog({ resolutionMode }) {
   );
 }
 
-function ResolveConflictsScreen({ resolutionMode }) {
+function ResolveConflictsScreen({ buttonMode, resolutionMode }) {
   return (
     <section className="dialog-demo-screen" aria-label="Resolve conflicts prototype">
       <ProjectMainWindow>
-        <ResolveConflictsDialog resolutionMode={resolutionMode} />
+        <ResolveConflictsDialog
+          buttonMode={buttonMode}
+          resolutionMode={resolutionMode}
+        />
       </ProjectMainWindow>
     </section>
   );
@@ -186,7 +207,7 @@ function ResolveConflictsScreen({ resolutionMode }) {
 
 export default function App() {
   const [activeScreenId, setActiveScreenId] = useState(getInitialActiveScreenId);
-  const activeResolutionMode = activeScreenId === 'long-running-resolution' ? 'long-running' : 'quick';
+  const activeScreen = SCREENS.find((screen) => screen.id === activeScreenId) ?? SCREENS[0];
 
   const handleScreenChange = (screenId) => {
     window.localStorage.setItem(ACTIVE_SCREEN_STORAGE_KEY, screenId);
@@ -197,24 +218,29 @@ export default function App() {
     <ThemeProvider defaultTheme="dark">
       <main className="prototype-shell">
         <div className="screen-switcher" role="tablist" aria-label="Prototype screens" aria-orientation="vertical">
-          <div className="screen-switcher-group-title">Без лоадера, задержка 600ms</div>
-          {SCREENS.map((screen) => (
-            <button
-              key={screen.id}
-              type="button"
-              className={`screen-switcher-tab${screen.id === activeScreenId ? ' screen-switcher-tab-active' : ''}`}
-              role="tab"
-              aria-selected={screen.id === activeScreenId}
-              onClick={() => handleScreenChange(screen.id)}
-            >
-              {screen.label}
-            </button>
+          {SCREEN_GROUPS.map((group) => (
+            <div className="screen-switcher-group" key={group.title}>
+              <div className="screen-switcher-group-title">{group.title}</div>
+              {group.screens.map((screen) => (
+                <button
+                  key={screen.id}
+                  type="button"
+                  className={`screen-switcher-tab${screen.id === activeScreenId ? ' screen-switcher-tab-active' : ''}`}
+                  role="tab"
+                  aria-selected={screen.id === activeScreenId}
+                  onClick={() => handleScreenChange(screen.id)}
+                >
+                  {screen.label}
+                </button>
+              ))}
+            </div>
           ))}
         </div>
 
         <ResolveConflictsScreen
           key={activeScreenId}
-          resolutionMode={activeResolutionMode}
+          buttonMode={activeScreen.buttonMode}
+          resolutionMode={activeScreen.resolutionMode}
         />
       </main>
     </ThemeProvider>

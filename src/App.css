@@ -35,6 +35,17 @@
   box-sizing: border-box;
 }
 
+.screen-switcher-group {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+}
+
+.screen-switcher-group + .screen-switcher-group {
+  margin-top: 14px;
+}
+
 .screen-switcher-group-title {
   min-width: 0;
   padding: 0 0 4px;
@@ -62,6 +73,8 @@
   line-height: 32px;
   text-align: left;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   cursor: pointer;
 }
 
@@ -180,6 +193,24 @@
 
 .conflict-dialog-button-icon-disabled {
   opacity: 0.4;
+}
+
+.conflict-dialog-button-loader {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  display: block;
+  border: 2px solid rgb(255 255 255 / 24%);
+  border-top-color: #ced0d6;
+  border-radius: 50%;
+  box-sizing: border-box;
+  animation: conflict-dialog-button-loader-spin 900ms linear infinite;
+}
+
+@keyframes conflict-dialog-button-loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .progress-dialog {
