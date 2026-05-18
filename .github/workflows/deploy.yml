@@ -29,10 +29,13 @@ jobs:
           cache: npm
 
       - name: Configure private GitHub dependencies
-        if: ${{ secrets.INT_UI_KIT_TOKEN != '' }}
+        env:
+          INT_UI_KIT_TOKEN: ${{ secrets.INT_UI_KIT_TOKEN }}
         run: |
-          git config --global url."https://x-access-token:${{ secrets.INT_UI_KIT_TOKEN }}@github.com/".insteadOf "https://github.com/"
-          git config --global url."https://x-access-token:${{ secrets.INT_UI_KIT_TOKEN }}@github.com/".insteadOf "ssh://git@github.com/"
+          if [ -n "$INT_UI_KIT_TOKEN" ]; then
+            git config --global url."https://x-access-token:${INT_UI_KIT_TOKEN}@github.com/".insteadOf "https://github.com/"
+            git config --global url."https://x-access-token:${INT_UI_KIT_TOKEN}@github.com/".insteadOf "ssh://git@github.com/"
+          fi
 
       - name: Install dependencies
         run: npm install
