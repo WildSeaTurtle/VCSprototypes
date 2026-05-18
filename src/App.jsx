@@ -3,6 +3,7 @@ import { Button, MainWindow, ThemeProvider } from '@jetbrains/int-ui-kit';
 import conflictDialogDisabledImage from '../img/Conflict dialog disabled.png';
 import conflictDialogNothingResolvedImage from '../img/Conflict dialog nothing resolved.png';
 import conflictDialogImage from '../img/Conflict dialog.png';
+import checkmarkDarkIcon from '../../int-ui-kit-for-web/src/icons/actions/checked_dark.svg';
 import magicResolveToolbarIcon from '../../int-ui-kit-for-web/src/icons/diff/magicResolveToolbar_dark.svg';
 import './App.css';
 
@@ -17,6 +18,9 @@ export default function App() {
     disabled: conflictDialogDisabledImage,
     nothingResolved: conflictDialogNothingResolvedImage,
   };
+  const isNothingResolved = conflictDialogState === 'nothingResolved';
+  const resolveButtonIcon = isNothingResolved ? checkmarkDarkIcon : magicResolveToolbarIcon;
+  const resolveButtonText = isNothingResolved ? 'All simple conflicts resolved' : 'Resolve All Simple Conflicts';
 
   const handleResolveButtonClick = () => {
     setIsResolveButtonDisabled(true);
@@ -55,10 +59,10 @@ export default function App() {
               >
                 <img
                   className={`conflict-dialog-button-icon${isResolveButtonDisabled ? ' conflict-dialog-button-icon-disabled' : ''}`}
-                  src={magicResolveToolbarIcon}
+                  src={resolveButtonIcon}
                   alt=""
                 />
-                <span>Resolve All Simple Conflicts</span>
+                <span>{resolveButtonText}</span>
               </Button>
             </div>
           </div>
