@@ -33,7 +33,7 @@ export default function App() {
 
   return (
     <ThemeProvider defaultTheme="dark">
-      <main className="theme-dark dialog-demo-screen">
+      <main className="dialog-demo-screen">
         <div className="main-window-layer">
           <MainWindow
             projectName="commons-math"
