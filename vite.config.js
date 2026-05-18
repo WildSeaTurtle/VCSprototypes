@@ -7,6 +7,14 @@ const dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
   plugins: [react({ include: /\.[jt]sx?$/ })],
+  server: {
+    fs: {
+      allow: [
+        dirname,
+        path.resolve(dirname, '../int-ui-kit-for-web'),
+      ],
+    },
+  },
   resolve: {
     alias: [
       {
