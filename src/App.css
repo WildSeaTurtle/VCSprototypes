@@ -1,4 +1,4 @@
-.dialog-demo-screen {
+.prototype-shell {
   width: 100vw;
   height: 100vh;
   height: 100dvh;
@@ -8,10 +8,61 @@
   overflow: hidden;
 }
 
+.dialog-demo-screen {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.screen-switcher {
+  position: fixed;
+  top: 28px;
+  left: 50%;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  width: max-content;
+  min-height: 32px;
+  padding: 2px;
+  border: 1px solid #4e5157;
+  border-radius: 7px;
+  background: #2b2d30;
+  box-shadow: 0 8px 28px rgb(0 0 0 / 28%);
+  transform: translateX(-50%);
+}
+
+.screen-switcher-tab {
+  min-width: 82px;
+  height: 28px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: #ced0d6;
+  font: inherit;
+  font-size: 13px;
+  line-height: 28px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.screen-switcher-tab:hover {
+  background: #393b40;
+  color: #ffffff;
+}
+
+.screen-switcher-tab-active,
+.screen-switcher-tab-active:hover {
+  background: #4b6eaf;
+  color: #ffffff;
+}
+
 .main-window-layer {
   --main-window-inset: 100px;
 
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 0;
   display: flex;
@@ -152,6 +203,10 @@
 }
 
 @media (max-width: 520px) {
+  .screen-switcher {
+    top: 16px;
+  }
+
   .progress-dialog-header,
   .progress-dialog-details {
     align-items: flex-start;

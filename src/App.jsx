@@ -8,8 +8,12 @@ import magicResolveToolbarIcon from '@jetbrains/int-ui-kit-icons/diff/magicResol
 import './App.css';
 
 const NOTHING_RESOLVED_DELAY_MS = 600;
+const SCREENS = [
+  { id: 'resolve-conflicts-1', label: 'Screen 1' },
+  { id: 'resolve-conflicts-2', label: 'Screen 2' },
+];
 
-export default function App() {
+function ResolveConflictsScreen() {
   const [isResolveButtonDisabled, setIsResolveButtonDisabled] = useState(false);
   const [conflictDialogState, setConflictDialogState] = useState('default');
 
@@ -32,41 +36,66 @@ export default function App() {
   };
 
   return (
-    <ThemeProvider defaultTheme="dark">
-      <main className="dialog-demo-screen">
-        <div className="main-window-layer">
-          <MainWindow
-            projectName="commons-math"
-            projectIcon="CM"
-            projectColor="grass"
-            branchName="feature/resolve-conflicts"
-            runConfig="IDEA Community"
-            height="100%"
-            defaultOpenToolWindows={['project']}
-          />
+    <section className="dialog-demo-screen" aria-label="Resolve conflicts prototype">
+      <div className="main-window-layer">
+        <MainWindow
+          projectName="commons-math"
+          projectIcon="CM"
+          projectColor="grass"
+          branchName="feature/resolve-conflicts"
+          runConfig="IDEA Community"
+          height="100%"
+          defaultOpenToolWindows={['project']}
+        />
 
-          <div className="conflict-dialog-image-layer">
-            <div className="conflict-dialog-image-frame">
+        <div className="conflict-dialog-image-layer">
+          <div className="conflict-dialog-image-frame">
+            <img
+              className="conflict-dialog-image"
+              src={conflictDialogImageByState[conflictDialogState]}
+              alt=""
+            />
+            <Button
+              className="conflict-dialog-button"
+              disabled={isResolveButtonDisabled}
+              onClick={handleResolveButtonClick}
+            >
               <img
-                className="conflict-dialog-image"
-                src={conflictDialogImageByState[conflictDialogState]}
+                className={`conflict-dialog-button-icon${isResolveButtonDisabled ? ' conflict-dialog-button-icon-disabled' : ''}`}
+                src={resolveButtonIcon}
                 alt=""
               />
-              <Button
-                className="conflict-dialog-button"
-                disabled={isResolveButtonDisabled}
-                onClick={handleResolveButtonClick}
-              >
-                <img
-                  className={`conflict-dialog-button-icon${isResolveButtonDisabled ? ' conflict-dialog-button-icon-disabled' : ''}`}
-                  src={resolveButtonIcon}
-                  alt=""
-                />
-                <span>{resolveButtonText}</span>
-              </Button>
-            </div>
+              <span>{resolveButtonText}</span>
+            </Button>
           </div>
         </div>
+      </div>
+    </section>
+  );
+}
+
+export default function App() {
+  const [activeScreenId, setActiveScreenId] = useState(SCREENS[0].id);
+
+  return (
+    <ThemeProvider defaultTheme="dark">
+      <main className="prototype-shell">
+        <div className="screen-switcher" role="tablist" aria-label="Prototype screens">
+          {SCREENS.map((screen) => (
+            <button
+              key={screen.id}
+              type="button"
+              className={`screen-switcher-tab${screen.id === activeScreenId ? ' screen-switcher-tab-active' : ''}`}
+              role="tab"
+              aria-selected={screen.id === activeScreenId}
+              onClick={() => setActiveScreenId(screen.id)}
+            >
+              {screen.label}
+            </button>
+          ))}
+        </div>
+
+        <ResolveConflictsScreen key={activeScreenId} />
       </main>
     </ThemeProvider>
   );
