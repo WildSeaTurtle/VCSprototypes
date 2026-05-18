@@ -206,10 +206,20 @@
 }
 
 .conflict-dialog-button-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   color: var(--text-secondary);
   font-size: 13px;
   line-height: 28px;
   white-space: nowrap;
+}
+
+.conflict-dialog-button-status-icon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  display: block;
 }
 
 .progress-dialog {
