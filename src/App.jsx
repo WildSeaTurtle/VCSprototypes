@@ -32,7 +32,7 @@ export default function App() {
   };
 
   return (
-    <ThemeProvider defaultTheme="light">
+    <ThemeProvider defaultTheme="dark">
       <main className="dialog-demo-screen">
         <div className="main-window-layer">
           <MainWindow
