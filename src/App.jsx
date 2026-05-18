@@ -58,6 +58,7 @@ function ResolveConflictsDialog({ resolutionMode }) {
   const resolveButtonText = conflictDialogState === 'someResolved'
     ? 'Some simple conflicts resolved'
     : isResolved ? 'All simple conflicts resolved' : 'Resolve All Simple Conflicts';
+  const resolveButtonTooltip = isResolved ? 'There are no simple conflicts to resolve' : undefined;
 
   const handleResolveButtonClick = () => {
     setIsResolveButtonDisabled(true);
@@ -87,18 +88,23 @@ function ResolveConflictsDialog({ resolutionMode }) {
             src={conflictDialogImageByState[conflictDialogState]}
             alt=""
           />
-          <Button
-            className="conflict-dialog-button"
-            disabled={isResolveButtonDisabled}
-            onClick={handleResolveButtonClick}
+          <div
+            className={`conflict-dialog-button-wrapper${isResolved ? ' conflict-dialog-button-wrapper-tooltip' : ''}`}
+            data-tooltip={resolveButtonTooltip}
           >
-            <img
-              className={`conflict-dialog-button-icon${isResolveButtonDisabled ? ' conflict-dialog-button-icon-disabled' : ''}`}
-              src={resolveButtonIcon}
-              alt=""
-            />
-            <span>{resolveButtonText}</span>
-          </Button>
+            <Button
+              className="conflict-dialog-button"
+              disabled={isResolveButtonDisabled}
+              onClick={handleResolveButtonClick}
+            >
+              <img
+                className={`conflict-dialog-button-icon${isResolveButtonDisabled ? ' conflict-dialog-button-icon-disabled' : ''}`}
+                src={resolveButtonIcon}
+                alt=""
+              />
+              <span>{resolveButtonText}</span>
+            </Button>
+          </div>
         </div>
       </div>
 
