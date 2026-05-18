@@ -80,7 +80,9 @@ function ResolveConflictsDialog({ buttonMode, resolutionMode }) {
   const isResolved = conflictDialogState === 'nothingResolved' || conflictDialogState === 'someResolved';
   const isButtonLoaderVisible = buttonMode === 'button-loader' && isResolveButtonDisabled && !isResolved;
   const isStatusVisible = buttonMode === 'status-next-to-button' && isResolved;
-  const resolveButtonIcon = isResolved ? checkmarkDarkIcon : magicResolveToolbarIcon;
+  const resolveButtonIcon = isResolved && buttonMode !== 'status-next-to-button'
+    ? checkmarkDarkIcon
+    : magicResolveToolbarIcon;
   const resolveButtonText = isResolved && buttonMode !== 'status-next-to-button'
     ? 'All simple conflicts resolved'
     : 'Resolve All Simple Conflicts';
