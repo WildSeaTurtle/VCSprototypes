@@ -133,7 +133,7 @@ export default function App() {
   return (
     <ThemeProvider defaultTheme="dark">
       <main className="prototype-shell">
-        <div className="screen-switcher" role="tablist" aria-label="Prototype screens">
+        <div className="screen-switcher" role="tablist" aria-label="Prototype screens" aria-orientation="vertical">
           {SCREENS.map((screen) => (
             <button
               key={screen.id}
