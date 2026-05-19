@@ -61,20 +61,18 @@
 .screen-switcher-tab {
   width: calc(100% - 16px);
   min-width: 0;
-  height: 32px;
+  min-height: 32px;
   margin-left: 16px;
-  padding: 0 12px;
+  padding: 6px 12px;
   border: 0;
   border-radius: 5px;
   background: transparent;
   color: #ced0d6;
   font: inherit;
   font-size: 13px;
-  line-height: 32px;
+  line-height: 1.35;
   text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
   cursor: pointer;
 }
 
@@ -209,7 +207,7 @@
   align-items: center;
   gap: 4px;
   margin-left: 16px;
-  color: var(--text-secondary);
+  color: var(--text-default);
   font-size: 13px;
   line-height: 28px;
   white-space: nowrap;

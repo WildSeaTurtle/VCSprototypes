@@ -16,22 +16,25 @@ const SCREEN_GROUPS = [
   {
     title: 'No loader, 600 ms delay',
     screens: [
-      { id: 'quick-resolution-no-loader', label: 'Quick Resolution', resolutionMode: 'quick', buttonMode: 'no-loader' },
+      { id: 'quick-resolution-no-loader', label: 'Quick Resolution Nothing Resolved', resolutionMode: 'quick', buttonMode: 'no-loader' },
       { id: 'long-running-resolution-no-loader', label: 'Long-Running Resolution', resolutionMode: 'long-running', buttonMode: 'no-loader' },
+      { id: 'quick-some-resolved-no-loader', label: 'Quick Resolution Some Resolved', resolutionMode: 'quick-some-resolved', buttonMode: 'no-loader' },
     ],
   },
   {
     title: 'Loader on button',
     screens: [
-      { id: 'quick-resolution-button-loader', label: 'Quick Resolution', resolutionMode: 'quick', buttonMode: 'button-loader' },
+      { id: 'quick-resolution-button-loader', label: 'Quick Resolution Nothing Resolved', resolutionMode: 'quick', buttonMode: 'button-loader' },
       { id: 'long-running-resolution-button-loader', label: 'Long-Running Resolution', resolutionMode: 'long-running', buttonMode: 'button-loader' },
+      { id: 'quick-some-resolved-button-loader', label: 'Quick Resolution Some Resolved', resolutionMode: 'quick-some-resolved', buttonMode: 'button-loader' },
     ],
   },
   {
     title: 'Status next to button',
     screens: [
-      { id: 'quick-resolution-status-next-to-button', label: 'Quick Resolution', resolutionMode: 'quick', buttonMode: 'status-next-to-button' },
+      { id: 'quick-resolution-status-next-to-button', label: 'Quick Resolution Nothing Resolved', resolutionMode: 'quick', buttonMode: 'status-next-to-button' },
       { id: 'long-running-resolution-status-next-to-button', label: 'Long-Running Resolution', resolutionMode: 'long-running', buttonMode: 'status-next-to-button' },
+      { id: 'quick-some-resolved-status-next-to-button', label: 'Quick Resolution Some Resolved', resolutionMode: 'quick-some-resolved', buttonMode: 'status-next-to-button' },
     ],
   },
 ];
@@ -71,6 +74,7 @@ function ResolveConflictsDialog({ buttonMode, resolutionMode }) {
   const tooltipTimerRef = useRef(null);
   const latestTooltipPositionRef = useRef(null);
   const isLongRunningResolution = resolutionMode === 'long-running';
+  const isQuickSomeResolved = resolutionMode === 'quick-some-resolved';
 
   const conflictDialogImageByState = {
     default: conflictDialogImage,
@@ -138,7 +142,7 @@ function ResolveConflictsDialog({ buttonMode, resolutionMode }) {
         return;
       }
 
-      setConflictDialogState('nothingResolved');
+      setConflictDialogState(isQuickSomeResolved ? 'someResolved' : 'nothingResolved');
     }, NOTHING_RESOLVED_DELAY_MS);
   };
 
@@ -183,7 +187,7 @@ function ResolveConflictsDialog({ buttonMode, resolutionMode }) {
               <span className="conflict-dialog-button-status">
                 <img
                   className="conflict-dialog-button-status-icon"
-                  src={checkmarkIcon}
+                  src={checkmarkDarkIcon}
                   alt=""
                 />
                 <span>All simple conflicts resolved</span>
