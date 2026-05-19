@@ -15,7 +15,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@jetbrains/int-ui-kit": "file:../int-ui-kit-for-web",
+    "@jetbrains/int-ui-kit": "file:./vendor/int-ui-kit",
     "prism-react-editor": "^3.1.0",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
