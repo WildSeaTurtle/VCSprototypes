@@ -179,12 +179,12 @@ function ResolveConflictsDialog({ buttonMode, resolutionMode, delay = NOTHING_RE
             src={conflictDialogImageByState[conflictDialogState]}
             alt=""
           />
-          <div
-            className="conflict-dialog-button-wrapper"
-            onMouseEnter={showTooltip}
-            onMouseMove={updateTooltipPosition}
-            onMouseLeave={hideTooltip}
-          >
+          <div className="conflict-dialog-button-wrapper">
+            <div
+              onMouseEnter={showTooltip}
+              onMouseMove={updateTooltipPosition}
+              onMouseLeave={hideTooltip}
+            >
             <Button
               className="conflict-dialog-button"
               disabled={isResolveButtonDisabled}
@@ -201,6 +201,7 @@ function ResolveConflictsDialog({ buttonMode, resolutionMode, delay = NOTHING_RE
               )}
               <span>{resolveButtonText}</span>
             </Button>
+            </div>
 
             {isStatusVisible && (
               <span className="conflict-dialog-button-status">
