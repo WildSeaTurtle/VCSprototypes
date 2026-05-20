@@ -205,12 +205,11 @@ function ResolveConflictsDialog({ buttonMode, resolutionMode, delay = NOTHING_RE
 
             {isStatusVisible && (
               <span className="conflict-dialog-button-status">
-                <img
-                  className="conflict-dialog-button-status-icon"
-                  src={checkmarkDarkIcon}
-                  alt=""
-                />
-                <span>Automatically resolved 31 conflicts. 29 conflicts in 7 files still require attention.</span>
+                <span>
+                  {conflictDialogState === 'nothingResolved'
+                    ? 'No conflicts were resolved automatically'
+                    : 'Automatically resolved 31 conflicts. 29 conflicts in 7 files still require attention'}
+                </span>
               </span>
             )}
 
