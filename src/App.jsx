@@ -15,10 +15,19 @@ const PROGRESS_DIALOG_DELAY_MS = 300;
 const TOOLTIP_DELAY_MS = 300;
 const SCREEN_GROUPS = [
   {
+    title: 'No loader, no delay',
+    screens: [
+      { id: 'quick-resolution-no-delay-100', label: 'Quick Resolution Nothing Resolved, 100 ms', resolutionMode: 'quick', buttonMode: 'no-loader', delay: 100 },
+      { id: 'quick-some-resolved-no-delay-100', label: 'Quick Resolution Some Resolved, 100 ms', resolutionMode: 'quick-some-resolved', buttonMode: 'no-loader', delay: 100 },
+      { id: 'quick-resolution-no-delay-300', label: 'Quick Resolution Nothing Resolved, 300 ms', resolutionMode: 'quick', buttonMode: 'no-loader', delay: 300 },
+      { id: 'quick-some-resolved-no-delay-300', label: 'Quick Resolution Some Resolved, 300 ms', resolutionMode: 'quick-some-resolved', buttonMode: 'no-loader', delay: 300 },
+    ],
+  },
+  {
     title: 'No loader, 600 ms delay',
     screens: [
       { id: 'quick-resolution-no-loader', label: 'Quick Resolution Nothing Resolved', resolutionMode: 'quick', buttonMode: 'no-loader' },
-      { id: 'long-running-resolution-no-loader', label: 'Long-Running Resolution', resolutionMode: 'long-running', buttonMode: 'no-loader' },
+      { id: 'long-running-resolution-no-loader', label: 'Long-Running Resolution, 300 ms delay', resolutionMode: 'long-running', buttonMode: 'no-loader' },
       { id: 'quick-some-resolved-no-loader', label: 'Quick Resolution Some Resolved', resolutionMode: 'quick-some-resolved', buttonMode: 'no-loader' },
     ],
   },
@@ -34,7 +43,7 @@ const SCREEN_GROUPS = [
     title: 'Status next to button',
     screens: [
       { id: 'quick-resolution-status-next-to-button', label: 'Quick Resolution Nothing Resolved', resolutionMode: 'quick', buttonMode: 'status-next-to-button' },
-      { id: 'long-running-resolution-status-next-to-button', label: 'Long-Running Resolution', resolutionMode: 'long-running', buttonMode: 'status-next-to-button' },
+      { id: 'long-running-resolution-status-next-to-button', label: 'Long-Running Resolution, 300 ms delay', resolutionMode: 'long-running', buttonMode: 'status-next-to-button' },
       { id: 'quick-some-resolved-status-next-to-button', label: 'Quick Resolution Some Resolved', resolutionMode: 'quick-some-resolved', buttonMode: 'status-next-to-button' },
     ],
   },
@@ -67,7 +76,7 @@ function ProjectMainWindow({ children }) {
   );
 }
 
-function ResolveConflictsDialog({ buttonMode, resolutionMode }) {
+function ResolveConflictsDialog({ buttonMode, resolutionMode, delay = NOTHING_RESOLVED_DELAY_MS }) {
   const [isResolveButtonDisabled, setIsResolveButtonDisabled] = useState(false);
   const [conflictDialogState, setConflictDialogState] = useState('default');
   const [isProgressDialogVisible, setIsProgressDialogVisible] = useState(false);
@@ -137,7 +146,7 @@ function ResolveConflictsDialog({ buttonMode, resolutionMode }) {
     setConflictDialogState('disabled');
     hideTooltip();
 
-    if (isLongRunningResolution && buttonMode === 'no-loader') {
+    if (isLongRunningResolution && (buttonMode === 'no-loader' || buttonMode === 'status-next-to-button')) {
       window.setTimeout(() => {
         setIsProgressDialogVisible(true);
       }, PROGRESS_DIALOG_DELAY_MS);
@@ -151,7 +160,7 @@ function ResolveConflictsDialog({ buttonMode, resolutionMode }) {
       }
 
       setConflictDialogState(isQuickSomeResolved ? 'someResolved' : 'nothingResolved');
-    }, NOTHING_RESOLVED_DELAY_MS);
+    }, delay);
   };
 
   const handleProgressComplete = () => {
@@ -226,13 +235,14 @@ function ResolveConflictsDialog({ buttonMode, resolutionMode }) {
   );
 }
 
-function ResolveConflictsScreen({ buttonMode, resolutionMode }) {
+function ResolveConflictsScreen({ buttonMode, resolutionMode, delay }) {
   return (
     <section className="dialog-demo-screen" aria-label="Resolve conflicts prototype">
       <ProjectMainWindow>
         <ResolveConflictsDialog
           buttonMode={buttonMode}
           resolutionMode={resolutionMode}
+          delay={delay}
         />
       </ProjectMainWindow>
     </section>
@@ -275,6 +285,7 @@ export default function App() {
           key={activeScreenId}
           buttonMode={activeScreen.buttonMode}
           resolutionMode={activeScreen.resolutionMode}
+          delay={activeScreen.delay}
         />
       </main>
     </ThemeProvider>
