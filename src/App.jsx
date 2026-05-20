@@ -11,6 +11,7 @@ import ResolveConflictsProgressDialog from './ResolveConflictsProgressDialog.jsx
 import './App.css';
 
 const NOTHING_RESOLVED_DELAY_MS = 600;
+const PROGRESS_DIALOG_DELAY_MS = 300;
 const TOOLTIP_DELAY_MS = 300;
 const SCREEN_GROUPS = [
   {
@@ -135,6 +136,13 @@ function ResolveConflictsDialog({ buttonMode, resolutionMode }) {
     setIsResolveButtonDisabled(true);
     setConflictDialogState('disabled');
     hideTooltip();
+
+    if (isLongRunningResolution && buttonMode === 'no-loader') {
+      window.setTimeout(() => {
+        setIsProgressDialogVisible(true);
+      }, PROGRESS_DIALOG_DELAY_MS);
+      return;
+    }
 
     window.setTimeout(() => {
       if (isLongRunningResolution) {
