@@ -21,7 +21,7 @@ const SCREEN_GROUPS = [
       { id: 'quick-some-resolved-no-delay-100', label: 'Quick Resolution Some Resolved, 100 ms', resolutionMode: 'quick-some-resolved', buttonMode: 'no-loader', delay: 100 },
       { id: 'quick-resolution-no-delay-300', label: 'Quick Resolution Nothing Resolved, 300 ms', resolutionMode: 'quick', buttonMode: 'no-loader', delay: 300 },
       { id: 'quick-some-resolved-no-delay-300', label: 'Quick Resolution Some Resolved, 300 ms', resolutionMode: 'quick-some-resolved', buttonMode: 'no-loader', delay: 300 },
-      { id: 'long-running-resolution-no-loader', label: 'Long-Running Resolution, 300 ms delay', resolutionMode: 'long-running', buttonMode: 'no-loader' },
+      { id: 'long-running-resolution-no-loader', label: 'Resolution with Progress Bar, 300 ms delay', resolutionMode: 'long-running', buttonMode: 'no-loader' },
     ],
   },
   {
@@ -45,7 +45,7 @@ const SCREEN_GROUPS = [
     title: 'Status next to button',
     screens: [
       { id: 'quick-resolution-status-next-to-button', label: 'Quick Resolution Nothing Resolved', resolutionMode: 'quick', buttonMode: 'status-next-to-button' },
-      { id: 'long-running-resolution-status-next-to-button', label: 'Long-Running Resolution, 300 ms delay', resolutionMode: 'long-running', buttonMode: 'status-next-to-button' },
+      { id: 'long-running-resolution-status-next-to-button', label: 'Resolution with Progress Bar, 300 ms delay', resolutionMode: 'long-running', buttonMode: 'status-next-to-button' },
       { id: 'quick-some-resolved-status-next-to-button', label: 'Quick Resolution Some Resolved', resolutionMode: 'quick-some-resolved', buttonMode: 'status-next-to-button' },
     ],
   },
