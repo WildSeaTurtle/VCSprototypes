@@ -15,24 +15,26 @@ const PROGRESS_DIALOG_DELAY_MS = 300;
 const TOOLTIP_DELAY_MS = 300;
 const SCREEN_GROUPS = [
   {
-    title: 'No loader, no delay',
+    title: 'Result feedback on the button',
     screens: [
       { id: 'quick-resolution-no-delay-100', label: 'Quick Resolution Nothing Resolved, 100 ms', resolutionMode: 'quick', buttonMode: 'no-loader', delay: 100 },
       { id: 'quick-some-resolved-no-delay-100', label: 'Quick Resolution Some Resolved, 100 ms', resolutionMode: 'quick-some-resolved', buttonMode: 'no-loader', delay: 100 },
       { id: 'quick-resolution-no-delay-300', label: 'Quick Resolution Nothing Resolved, 300 ms', resolutionMode: 'quick', buttonMode: 'no-loader', delay: 300 },
       { id: 'quick-some-resolved-no-delay-300', label: 'Quick Resolution Some Resolved, 300 ms', resolutionMode: 'quick-some-resolved', buttonMode: 'no-loader', delay: 300 },
+      { id: 'long-running-resolution-no-loader', label: 'Long-Running Resolution, 300 ms delay', resolutionMode: 'long-running', buttonMode: 'no-loader' },
     ],
   },
   {
     title: 'No loader, 600 ms delay',
+    hidden: true,
     screens: [
       { id: 'quick-resolution-no-loader', label: 'Quick Resolution Nothing Resolved', resolutionMode: 'quick', buttonMode: 'no-loader' },
-      { id: 'long-running-resolution-no-loader', label: 'Long-Running Resolution, 300 ms delay', resolutionMode: 'long-running', buttonMode: 'no-loader' },
       { id: 'quick-some-resolved-no-loader', label: 'Quick Resolution Some Resolved', resolutionMode: 'quick-some-resolved', buttonMode: 'no-loader' },
     ],
   },
   {
     title: 'Loader on button',
+    hidden: true,
     screens: [
       { id: 'quick-resolution-button-loader', label: 'Quick Resolution Nothing Resolved', resolutionMode: 'quick', buttonMode: 'button-loader' },
       { id: 'long-running-resolution-button-loader', label: 'Long-Running Resolution', resolutionMode: 'long-running', buttonMode: 'button-loader' },
@@ -262,7 +264,7 @@ export default function App() {
     <ThemeProvider defaultTheme="dark">
       <main className="prototype-shell">
         <div className="screen-switcher" role="tablist" aria-label="Prototype screens" aria-orientation="vertical">
-          {SCREEN_GROUPS.map((group) => (
+          {SCREEN_GROUPS.filter((group) => !group.hidden).map((group) => (
             <div className="screen-switcher-group" key={group.title}>
               <div className="screen-switcher-group-title">{group.title}</div>
               {group.screens.map((screen) => (
